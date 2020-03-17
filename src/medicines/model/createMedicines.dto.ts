@@ -4,7 +4,8 @@ import { IsEmail, IsEnum, IsOptional, IsString, IsNumber } from "class-validator
 export class CreateMedicinesDto {
 
     @ApiModelProperty()
-    @IsEmail()
+    @IsString()
+    @IsOptional()
     name: string;
 
     @ApiModelProperty()
@@ -13,9 +14,9 @@ export class CreateMedicinesDto {
     description: string;
 
     @ApiModelProperty()
-    @IsNumber()
+    @IsString()
     @IsOptional()
-    price: number;
+    price: string;
 
     @ApiModelProperty()
     @IsString()

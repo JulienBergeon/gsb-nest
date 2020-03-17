@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, UnauthorizedException, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
-import { Repository, UpdateResult } from 'typeorm';
+import { Repository, UpdateResult, Like } from 'typeorm';
 import { Medicines } from './medicines.entity';
 import { RoleEnum } from '../common/role.enum';
 
@@ -10,8 +10,14 @@ export class MedicinesService {
 
     constructor(@InjectRepository(Medicines) private medicinesRepository: Repository<Medicines>) { }
 
-    async getMedicines(): Promise<Medicines[]> {
-        return await this.medicinesRepository.find({
+    async getMedicines(pageIndex: number, pageSize: number, search: string): Promise<[Medicines[], number]> {
+        return await this.medicinesRepository.findAndCount({
+            where: [
+                { name: Like(`%${search}%`) },
+                { description: Like(`%${search}%`) },
+            ],
+            skip: pageIndex * pageSize,
+            take: pageSize,
         });
     }
 

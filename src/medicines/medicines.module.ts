@@ -1,3 +1,4 @@
+import { CommonModule } from './../common/common.module';
 import { Module } from '@nestjs/common';
 import { MedicinesService } from './medicines.service';
 import { MedicinesController } from './medicines.controller';
@@ -8,12 +9,15 @@ import { CreateMedicinesDtoConverter } from './converter/createMedicinesDto.conv
 import { UpdateMedicinesDtoConverter } from './converter/updateMedicinesDto.converter';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Medicines])],
+  imports: [
+    TypeOrmModule.forFeature([Medicines]),
+    CommonModule,
+  ],
   providers: [
-    MedicinesService, 
+    MedicinesService,
     MedicinesDtoConverter,
     CreateMedicinesDtoConverter,
-    UpdateMedicinesDtoConverter
+    UpdateMedicinesDtoConverter,
   ],
   controllers: [MedicinesController],
   exports: [

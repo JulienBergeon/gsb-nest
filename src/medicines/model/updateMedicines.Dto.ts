@@ -1,5 +1,5 @@
 import { ApiModelProperty } from "@nestjs/swagger";
-import { IsString, IsOptional, IsEmail, IsNumber } from "class-validator";
+import { IsEmail, IsOptional, IsString } from "class-validator";
 
 export class UpdateMedicinesDto {
     @ApiModelProperty({required: false})
@@ -13,9 +13,9 @@ export class UpdateMedicinesDto {
     description?: string;
 
     @ApiModelProperty({required: false})
-    @IsNumber()
+    @IsString()
     @IsOptional()
-    price?: number;
+    price?: string;
 
     @ApiModelProperty({required: false})
     @IsString()

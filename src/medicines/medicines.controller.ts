@@ -1,6 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Request, UseGuards, ParseIntPipe } from '@nestjs/common';
+import { PaginatedDto } from './../common/dto/paginated.dto';
+import { PaginatedDtoConverter } from './../common/converter/paginated.converter';
+import { Body, Controller, Delete, Get, Param, Post, Put, Request, UseGuards, ParseIntPipe, Query } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiImplicitBody, ApiImplicitParam, ApiResponse, ApiUseTags } from '@nestjs/swagger';
+import { ApiImplicitBody, ApiImplicitParam, ApiResponse, ApiUseTags, ApiImplicitQuery } from '@nestjs/swagger';
 import { MedicinesDtoConverter } from './converter/medicinesDto.converter';
 import { MedicinesDto } from './model/medicines.dto';
 import { Medicines } from './medicines.entity';
@@ -18,16 +20,25 @@ export class MedicinesController {
         private readonly service: MedicinesService, 
         private readonly medicinesDtoConverter: MedicinesDtoConverter,
         private readonly createMedicinesDtoConverter: CreateMedicinesDtoConverter,
-        private readonly updateMedicinesDtoConverter: UpdateMedicinesDtoConverter
+        private readonly updateMedicinesDtoConverter: UpdateMedicinesDtoConverter,
+        private readonly paginatedDtoConverter: PaginatedDtoConverter,
     ) { }
     
     //@UseGuards(AuthGuard('auth'))
-    @Get('all')
+    @Get('')
+    @ApiImplicitQuery({ name: 'pageIndex', type: Number, description: 'Page index for pagination' })
+    @ApiImplicitQuery({ name: 'pageSize', type: Number, description: 'Page size for pagination' })
+    @ApiImplicitQuery({ name: 'search', type: String, description: 'Search field' })
     @ApiResponse({ status: 201, description: 'All medicines', type: MedicinesDto, isArray: true})
     @ApiResponse({ status: 401, description: 'Medicines not authentificated'})
-    async getAll(): Promise<MedicinesDto[]> {
-        const medicines: Medicines[] = await this.service.getMedicines();
-        return this.medicinesDtoConverter.convertOutboundCollection(medicines);
+    async getAll(
+        @Query('pageIndex', new ParseIntPipe()) pageIndex: number,
+        @Query('pageSize', new ParseIntPipe()) pageSize: number,
+        @Query('search') search: string,
+    ): Promise<PaginatedDto<MedicinesDto>> {
+        const [medicines, nbMedicines] = await this.service.getMedicines(pageIndex, pageSize, search);
+        const medicinesDto: MedicinesDto[] = this.medicinesDtoConverter.convertOutboundCollection(medicines);
+        return this.paginatedDtoConverter.convertOutbound([medicinesDto, nbMedicines]);
     }
 
    // @UseGuards(AuthGuard('auth'))
