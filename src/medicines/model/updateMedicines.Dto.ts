@@ -13,9 +13,9 @@ export class UpdateMedicinesDto {
     description?: string;
 
     @ApiModelProperty({required: false})
-    @IsNumber()
+    @IsString()
     @IsOptional()
-    price?: number;
+    price?: string;
 
     @ApiModelProperty({required: false})
     @IsString()

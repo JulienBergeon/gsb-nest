@@ -13,9 +13,9 @@ export class CreateMedicinesDto {
     description: string;
 
     @ApiModelProperty()
-    @IsNumber()
+    @IsString()
     @IsOptional()
-    price: number;
+    price: string;
 
     @ApiModelProperty()
     @IsString()

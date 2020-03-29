@@ -15,8 +15,8 @@ export class MedicinesDto {
     description: string;
 
     @ApiModelProperty()
-    @IsNumber()
-    price: number;
+    @IsString()
+    price: string;
 
     @ApiModelProperty()
     @IsString()

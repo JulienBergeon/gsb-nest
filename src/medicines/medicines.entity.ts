@@ -16,9 +16,9 @@ export class Medicines {
     @IsString()
     description = '';
 
-    @Column({ type: Number })
-    @IsNumber()
-    price: number;
+    @Column({ type: String })
+    @IsString()
+    price = '';
 
     @Column({ type: String })
     @IsString()
