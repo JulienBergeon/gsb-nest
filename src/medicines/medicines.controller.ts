@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiImplicitBody, ApiImplicitParam, ApiResponse, ApiUseTags } from '@nestjs/swagger';
 import { MedicinesDtoConverter } from './converter/medicinesDto.converter';
 import { MedicinesDto } from './model/medicines.dto';
-import { Medicines } from './medicines.entity';
+import { Medicine } from './medicines.entity';
 import { MedicinesService } from './medicines.service';
 import { CreateMedicinesDtoConverter } from './converter/createMedicinesDto.converter';
 import { CreateMedicinesDto } from './model/createMedicines.dto';
@@ -26,7 +26,7 @@ export class MedicinesController {
     @ApiResponse({ status: 201, description: 'All medicines', type: MedicinesDto, isArray: true})
     @ApiResponse({ status: 401, description: 'Medicines not authentificated'})
     async getAll(): Promise<MedicinesDto[]> {
-        const medicines: Medicines[] = await this.service.getMedicines();
+        const medicines: Medicine[] = await this.service.getMedicines();
         return this.medicinesDtoConverter.convertOutboundCollection(medicines);
     }
 
@@ -63,7 +63,7 @@ export class MedicinesController {
     @ApiResponse({ status: 401, description: 'Medicines not authentificated'})
     @ApiResponse({ status: 404, description: 'Medicines not found'})
     async get(@Param('id', new ParseIntPipe()) id: number): Promise<MedicinesDto> {
-        const medicines: Medicines = await this.service.getMedicinesById(id);
+        const medicines: Medicine = await this.service.getMedicinesById(id);
         return this.medicinesDtoConverter.convertOutbound(medicines);
     }
 
@@ -72,8 +72,8 @@ export class MedicinesController {
     @ApiResponse({ status: 201, description: 'Medicines found', type: MedicinesDto})
     @ApiResponse({ status: 401, description: 'Medicines not authentificated'})
     async create(@Body() medicines: CreateMedicinesDto): Promise<MedicinesDto> {
-        const medicinesToCreate: Partial<Medicines> = this.createMedicinesDtoConverter.convertInbound(medicines);
-        const createdMedicines: Medicines = await this.service.createMedicines(medicinesToCreate);
+        const medicinesToCreate: Partial<Medicine> = this.createMedicinesDtoConverter.convertInbound(medicines);
+        const createdMedicines: Medicine = await this.service.createMedicines(medicinesToCreate);
         return this.medicinesDtoConverter.convertOutbound(createdMedicines);
     }
 
@@ -85,8 +85,8 @@ export class MedicinesController {
     @ApiResponse({ status: 401, description: 'Medicines not authentificated'})
     @ApiResponse({ status: 404, description: 'Medicines not found'})
     async update(@Param('id', new ParseIntPipe()) id: number, @Body() medicines: UpdateMedicinesDto): Promise<MedicinesDto> {
-        const medicinesToUpdate: Partial<Medicines> = this.updateMedicinesDtoConverter.convertInbound(medicines);
-        const medicinesUpdated: Medicines = await this.service.updateMedicines(id, medicinesToUpdate);
+        const medicinesToUpdate: Partial<Medicine> = this.updateMedicinesDtoConverter.convertInbound(medicines);
+        const medicinesUpdated: Medicine = await this.service.updateMedicines(id, medicinesToUpdate);
         return this.medicinesDtoConverter.convertOutbound(medicinesUpdated);
     }
 

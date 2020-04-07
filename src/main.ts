@@ -11,14 +11,13 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
 
-  //Autorise les requêtes cross domaine (de localhost:4200 à localhost:3000)
+  // Autorise les requêtes cross domaine (de localhost:4200 à localhost:3000)
   app.enableCors({ origin: `http://localhost:4200`});
 
-  //Définit un préfixe pour toutes les routes (/api)
+  // Définit un préfixe pour toutes les routes (/api)
   app.setGlobalPrefix(configService.apiBasePath);
 
-
-  //Initialise et configure le swagger
+  // Initialise et configure le swagger
   const swaggerOptions = new DocumentBuilder()
     .setTitle('GSB')
     .setDescription('API for gsb')
@@ -27,7 +26,7 @@ async function bootstrap() {
     .setSchemes(configService.swaggerProtocol)
     .addBearerAuth()
     .setHost(configService.swaggerHostName)
-    //.setBasePath(configService.apiBasePath)
+    // .setBasePath(configService.apiBasePath)
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerOptions);
@@ -41,13 +40,13 @@ async function bootstrap() {
   },
   });
 
-  //Définit la route sur laquelle l'interface graphique (swagger-ui) est disponible
+  // Définit la route sur laquelle l'interface graphique (swagger-ui) est disponible
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(document));
 
   /**
    * Utilise un Pipe de validation qui permet de déclencher une exception (erreur avec un statut 400),
    * lorsque les paramètres d'entrée d'une route ne correspondent pas au type attendu
-   * 
+   *
    * Exemple: POur la création d'un utilisateur si la valeur de gender est différente de 'Male' ou 'Female',
    * Cette route renverra une erreur 400
   */
@@ -60,9 +59,9 @@ async function bootstrap() {
 
   /**
    * Crée un serveur sur le port 1336 qui permet de distribué le fichier swagger.json.
-   * Ce fichier est utile en développement pour contruire les classes qui seront utilisées côté front pour communiquer avec le serveur. 
+   * Ce fichier est utile en développement pour contruire les classes qui seront utilisées côté front pour communiquer avec le serveur.
    * (grâce à ng-swagger-gen)
-   * 
+   *
    * En utilisant ng-swagger-gen côté front, on peut automatiser la création des classes attendues et de celles retournées par le serveur.
    * (PI: il permet même de créer les services qui correspondent au controller déifnit côté serveur)
    */

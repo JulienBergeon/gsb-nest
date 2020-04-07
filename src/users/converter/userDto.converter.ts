@@ -4,11 +4,11 @@ import { Converter } from '../../common/converter';
 import { RoleEnum } from '../../common/role.enum';
 import { GenderEnum } from '../../common/gender.enum';
 
-export class UserDtoConverter implements Converter<UserDto, User>{
+export class UserDtoConverter implements Converter<UserDto, User> {
     constructor() {}
 
     convertOutbound(user: User): UserDto {
-        let userDto: UserDto = {
+        const userDto: UserDto = {
             id: user.id,
             address: user.address,
             email: user.email,
@@ -16,11 +16,8 @@ export class UserDtoConverter implements Converter<UserDto, User>{
             lastName: user.lastName,
             gender: GenderEnum[user.gender],
             role: RoleEnum[user.role],
+            medicines: user.medicines,
         };
-
-        // if (user.role === RoleEnum.Patient) {
-        //     userDto['doctors'] = user.doctors.map(d => d.id);
-        // }
 
         return userDto;
     }

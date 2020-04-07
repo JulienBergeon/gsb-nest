@@ -1,5 +1,5 @@
-import { ApiModelProperty } from "@nestjs/swagger";
-import { IsString, IsEmail } from "class-validator";
+import { ApiModelProperty } from '@nestjs/swagger';
+import { IsString, IsEmail } from 'class-validator';
 
 export class CheckCredentialDto {
     @ApiModelProperty()

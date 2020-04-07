@@ -1,12 +1,12 @@
 import { CreateMedicinesDto } from "../model/createMedicines.dto";
-import { Medicines } from "../medicines.entity";
+import { Medicine } from "../medicines.entity";
 import { Converter } from "../../common/converter";
 
-export class CreateMedicinesDtoConverter implements Converter<CreateMedicinesDto, Partial<Medicines>>{
+export class CreateMedicinesDtoConverter implements Converter<CreateMedicinesDto, Partial<Medicine>>{
     
     constructor() {}
 
-    convertInbound(medicines: CreateMedicinesDto): Partial<Medicines> {
+    convertInbound(medicines: CreateMedicinesDto): Partial<Medicine> {
         let medicinesToCreate = {
             name: medicines.name,
             description: medicines.description,

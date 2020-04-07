@@ -1,11 +1,11 @@
 import { MedicinesDto } from '../model/medicines.dto';
-import { Medicines } from '../medicines.entity';
+import { Medicine } from '../medicines.entity';
 import { Converter } from '../../common/converter';
 
-export class MedicinesDtoConverter implements Converter<MedicinesDto, Medicines>{
+export class MedicinesDtoConverter implements Converter<MedicinesDto, Medicine>{
     constructor() {}
 
-    convertOutbound(medicines: Medicines): MedicinesDto {
+    convertOutbound(medicines: Medicine): MedicinesDto {
         let medicinesDto: MedicinesDto = {
             id: medicines.id,
             name: medicines.name,
@@ -21,7 +21,7 @@ export class MedicinesDtoConverter implements Converter<MedicinesDto, Medicines>
         return medicinesDto;
     }
 
-    convertOutboundCollection(mediciness: Medicines[]): MedicinesDto[] {
+    convertOutboundCollection(mediciness: Medicine[]): MedicinesDto[] {
         return mediciness.map((medicines) => this.convertOutbound(medicines));
     }
 }

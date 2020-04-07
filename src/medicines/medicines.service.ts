@@ -2,21 +2,21 @@ import { Injectable, NotFoundException, UnauthorizedException, ForbiddenExceptio
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Repository, UpdateResult } from 'typeorm';
-import { Medicines } from './medicines.entity';
+import { Medicine } from './medicines.entity';
 import { RoleEnum } from '../common/role.enum';
 
 @Injectable()
 export class MedicinesService {
 
-    constructor(@InjectRepository(Medicines) private medicinesRepository: Repository<Medicines>) { }
+    constructor(@InjectRepository(Medicine) private medicinesRepository: Repository<Medicine>) { }
 
-    async getMedicines(): Promise<Medicines[]> {
+    async getMedicines(): Promise<Medicine[]> {
         return await this.medicinesRepository.find({
         });
     }
 
-    async getMedicinesById(id: number): Promise<Medicines> {
-        const medicines: Medicines | undefined = await this.medicinesRepository.findOne({
+    async getMedicinesById(id: number): Promise<Medicine> {
+        const medicines: Medicine | undefined = await this.medicinesRepository.findOne({
             where: [{ id }]
         });
         
@@ -26,12 +26,12 @@ export class MedicinesService {
         return medicines;
     }
 
-    async createMedicines(medicines: Partial<Medicines>): Promise<Medicines> {
-        const medicinesCreated: Medicines = this.medicinesRepository.create(medicines);
+    async createMedicines(medicines: Partial<Medicine>): Promise<Medicine> {
+        const medicinesCreated: Medicine = this.medicinesRepository.create(medicines);
         return this.medicinesRepository.save(medicinesCreated);
     }
 
-    async updateMedicines(id: number, medicines: Partial<Medicines>): Promise<Medicines> {
+    async updateMedicines(id: number, medicines: Partial<Medicine>): Promise<Medicine> {
 
         const result: UpdateResult = await this.medicinesRepository.update(id, medicines);
 
@@ -42,7 +42,7 @@ export class MedicinesService {
     }
 
     async deleteMedicines(id: number): Promise<void> {
-        const medicines: Medicines | undefined = await this.getMedicinesById(id);
+        const medicines: Medicine | undefined = await this.getMedicinesById(id);
         if (!medicines) {
             throw new NotFoundException("Ce medicament n'existe pas.");
         }

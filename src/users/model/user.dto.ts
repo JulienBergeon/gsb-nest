@@ -1,7 +1,8 @@
-import { ApiModelProperty } from "@nestjs/swagger";
-import { IsNumber, IsString, IsEmail } from "class-validator";
-import { GenderEnum } from "../../common/gender.enum";
-import { RoleEnum } from "../../common/role.enum";
+import { MedicinesDto } from './../../medicines/model/medicines.dto';
+import { ApiModelProperty } from '@nestjs/swagger';
+import { IsNumber, IsString, IsEmail, IsJSON } from 'class-validator';
+import { GenderEnum } from '../../common/gender.enum';
+import { RoleEnum } from '../../common/role.enum';
 
 export class UserDto {
     @ApiModelProperty()
@@ -32,6 +33,7 @@ export class UserDto {
     @IsString()
     gender: string;
 
-    @ApiModelProperty({type: Number, isArray: true, required: false})
-    doctors?: number[];
+    @ApiModelProperty({ type: MedicinesDto, isArray: true})
+    @IsJSON()
+    medicines: MedicinesDto[];
 }
