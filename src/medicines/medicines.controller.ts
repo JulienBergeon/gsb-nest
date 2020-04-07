@@ -1,15 +1,14 @@
-import { PaginatedDto } from './../common/dto/paginated.dto';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { ApiImplicitBody, ApiImplicitParam, ApiImplicitQuery, ApiResponse, ApiUseTags } from '@nestjs/swagger';
 import { PaginatedDtoConverter } from './../common/converter/paginated.converter';
-import { Body, Controller, Delete, Get, Param, Post, Put, Request, UseGuards, ParseIntPipe, Query } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { ApiImplicitBody, ApiImplicitParam, ApiResponse, ApiUseTags, ApiImplicitQuery } from '@nestjs/swagger';
+import { CreateMedicinesDtoConverter } from './converter/createMedicinesDto.converter';
 import { MedicinesDtoConverter } from './converter/medicinesDto.converter';
-import { MedicinesDto } from './model/medicines.dto';
+import { UpdateMedicinesDtoConverter } from './converter/updateMedicinesDto.converter';
 import { Medicines } from './medicines.entity';
 import { MedicinesService } from './medicines.service';
-import { CreateMedicinesDtoConverter } from './converter/createMedicinesDto.converter';
 import { CreateMedicinesDto } from './model/createMedicines.dto';
-import { UpdateMedicinesDtoConverter } from './converter/updateMedicinesDto.converter';
+import { MedicinesDto } from './model/medicines.dto';
+import { PaginatedMedicinesDto } from './model/paginated-medicines.dto';
 import { UpdateMedicinesDto } from './model/updateMedicines.Dto';
 
 @ApiUseTags('medicines')
@@ -21,7 +20,7 @@ export class MedicinesController {
         private readonly medicinesDtoConverter: MedicinesDtoConverter,
         private readonly createMedicinesDtoConverter: CreateMedicinesDtoConverter,
         private readonly updateMedicinesDtoConverter: UpdateMedicinesDtoConverter,
-        private readonly paginatedDtoConverter: PaginatedDtoConverter,
+        private readonly paginatedDtoConverter: PaginatedDtoConverter<MedicinesDto>,
     ) { }
     
     //@UseGuards(AuthGuard('auth'))
@@ -29,13 +28,13 @@ export class MedicinesController {
     @ApiImplicitQuery({ name: 'pageIndex', type: Number, description: 'Page index for pagination' })
     @ApiImplicitQuery({ name: 'pageSize', type: Number, description: 'Page size for pagination' })
     @ApiImplicitQuery({ name: 'search', type: String, description: 'Search field' })
-    @ApiResponse({ status: 201, description: 'All medicines', type: MedicinesDto, isArray: true})
+    @ApiResponse({ status: 201, description: 'All medicines', type: PaginatedMedicinesDto})
     @ApiResponse({ status: 401, description: 'Medicines not authentificated'})
     async getAll(
         @Query('pageIndex', new ParseIntPipe()) pageIndex: number,
         @Query('pageSize', new ParseIntPipe()) pageSize: number,
         @Query('search') search: string,
-    ): Promise<PaginatedDto<MedicinesDto>> {
+    ): Promise<PaginatedMedicinesDto> {
         const [medicines, nbMedicines] = await this.service.getMedicines(pageIndex, pageSize, search);
         const medicinesDto: MedicinesDto[] = this.medicinesDtoConverter.convertOutboundCollection(medicines);
         return this.paginatedDtoConverter.convertOutbound([medicinesDto, nbMedicines]);
