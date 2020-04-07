@@ -4,10 +4,23 @@ import { Converter } from '../../common/converter';
 import { RoleEnum } from '../../common/role.enum';
 import { GenderEnum } from '../../common/gender.enum';
 
-export class UserDtoConverter implements Converter<UserDto, User> {
+export class UserDtoConverter implements Converter<UserDto, Partial<User>> {
     constructor() {}
 
-    convertOutbound(user: User): UserDto {
+    convertInbound(user: UserDto): Partial<User> {
+        return {
+            id: user.id,
+            address: user.address,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            gender: GenderEnum[user.gender],
+            role: RoleEnum[user.role],
+            medicines: user.medicines,
+        };
+    }
+
+    convertOutbound(user: Partial<User>): UserDto {
         const userDto: UserDto = {
             id: user.id,
             address: user.address,

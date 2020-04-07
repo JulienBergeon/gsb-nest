@@ -1,27 +1,26 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Request, UseGuards, ParseIntPipe } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Request } from '@nestjs/common';
 import { ApiImplicitBody, ApiImplicitParam, ApiResponse, ApiUseTags } from '@nestjs/swagger';
+import { CreateUserDtoConverter } from './converter/createUserDto.converter';
+import { UpdateUserDtoConverter } from './converter/updateUserDto.converter';
 import { UserDtoConverter } from './converter/userDto.converter';
+import { CreateUserDto } from './model/createUser.dto';
+import { UpdateUserDto } from './model/updateUser.Dto';
 import { UserDto } from './model/user.dto';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
-import { CreateUserDtoConverter } from './converter/createUserDto.converter';
-import { CreateUserDto } from './model/createUser.dto';
-import { UpdateUserDtoConverter } from './converter/updateUserDto.converter';
-import { UpdateUserDto } from './model/updateUser.Dto';
 
 @ApiUseTags('users')
 @Controller('users')
 export class UsersController {
 
     constructor(
-        private readonly service: UsersService, 
+        private readonly service: UsersService,
         private readonly userDtoConverter: UserDtoConverter,
         private readonly createUserDtoConverter: CreateUserDtoConverter,
-        private readonly updateUserDtoConverter: UpdateUserDtoConverter
+        private readonly updateUserDtoConverter: UpdateUserDtoConverter,
     ) { }
-    
-    //@UseGuards(AuthGuard('auth'))
+
+    // @UseGuards(AuthGuard('auth'))
     @Get('')
     @ApiResponse({ status: 201, description: 'All users', type: UserDto, isArray: true})
     @ApiResponse({ status: 401, description: 'User not authentificated'})
@@ -38,7 +37,7 @@ export class UsersController {
         return this.userDtoConverter.convertOutbound(req.user);
     }
 
-    //@UseGuards(AuthGuard('auth'))
+    // @UseGuards(AuthGuard('auth'))
     @Get('doctors')
     @ApiResponse({ status: 201, description: 'Doctors found', type: UserDto, isArray: true})
     @ApiResponse({ status: 401, description: 'User not authentificated'})
@@ -47,7 +46,7 @@ export class UsersController {
         return this.userDtoConverter.convertOutboundCollection(doctors);
     }
 
-    //@UseGuards(AuthGuard('auth'))
+    // @UseGuards(AuthGuard('auth'))
     @Get(':id')
     @ApiImplicitParam({name: 'id', description: 'User id to retrieve', required: true, type: Number})
     @ApiResponse({ status: 201, description: 'User found', type: UserDto})
@@ -68,7 +67,7 @@ export class UsersController {
         return this.userDtoConverter.convertOutbound(createdUser);
     }
 
-    //@UseGuards(AuthGuard('auth'))
+    // @UseGuards(AuthGuard('auth'))
     @Post(':id')
     @ApiImplicitParam({name: 'id', description: 'User id to update', required: true, type: Number})
     @ApiImplicitBody({name: 'UpdateUserDto', description: 'User information to update', type: UpdateUserDto})
@@ -81,7 +80,7 @@ export class UsersController {
         return this.userDtoConverter.convertOutbound(userUpdated);
     }
 
-    //@UseGuards(AuthGuard('auth'))
+    // @UseGuards(AuthGuard('auth'))
     @Delete(':id')
     @ApiImplicitParam({name: 'id', description: 'User id to delete', required: true, type: Number})
     @ApiResponse({ status: 201, description: 'User deleted'})

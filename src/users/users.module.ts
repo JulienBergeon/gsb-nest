@@ -10,16 +10,16 @@ import { UpdateUserDtoConverter } from './converter/updateUserDto.converter';
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
   providers: [
-    UsersService, 
+    UsersService,
     UserDtoConverter,
     CreateUserDtoConverter,
-    UpdateUserDtoConverter
+    UpdateUserDtoConverter,
   ],
   controllers: [UsersController],
   exports: [
     UsersService,
     UserDtoConverter,
     CreateUserDtoConverter,
-  ]
+  ],
 })
 export class UsersModule {}

@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { DoctorModule } from './doctor/doctor.module';
 import { MedicinesModule } from './medicines/medicines.module';
 import { UsersModule } from './users/users.module';
+import { MeetingsModule } from './meetings/meetings.module';
 
 const typeOrmConfig: MysqlConnectionOptions = {
   type: 'mysql',
@@ -29,6 +30,7 @@ const typeOrmConfig: MysqlConnectionOptions = {
     AppointmentsModule,
     AuthModule,
     DoctorModule,
+    MeetingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
